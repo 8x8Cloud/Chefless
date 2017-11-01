@@ -1,0 +1,16 @@
+cookbook_path   [{{.CookbookPaths}}]
+{{if .HasRolesPath}}
+role_path   "{{.RolesPath}}"
+{{end}}
+{{if .HasDataBagsPath}}
+data_bag_path "{{.DataBagsPath}}"
+{{end}}
+{{if .HasEncryptedDataBagSecretPath}}
+encrypted_data_bag_secret "{{.EncryptedDataBagSecretPath}}"
+{{end}}
+{{if .HasEnvironmentsPath}}
+environment_path "{{.EnvironmentsPath}}"
+environment "{{.ChefEnvironment}}"
+{{end}}
+umask 022
+verbose_logging true

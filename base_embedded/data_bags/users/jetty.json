@@ -1,0 +1,7 @@
+{
+  "id"          : "jetty",
+  "comment"     : "Jetty Daemon",
+  "manage_home" : "false",
+  "ssh_keygen"  : "false",
+  "groups"      : ["jetty"]
+}

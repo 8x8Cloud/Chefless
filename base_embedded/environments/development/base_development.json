@@ -1,0 +1,36 @@
+{
+  "name": "base_development",
+  "description": "8x8 Base Embedded App",
+  "cookbook_versions": {
+  },
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+  },
+  "override_attributes": {
+   "users": ["base"],
+    "auth": {
+        "pw_max_age": "99999"
+    },
+    "eght_app": {
+      "install_java": true,
+      "application": {
+        "xmsapp": {
+          "cleanup_releases": true,
+          "java_options":     ["-Xms512m -Xmx512m -Xss228k -XX:NewRatio=3 -XX:SurvivorRatio=6 -Djava.net.preferIPv4Stack=true"],
+          "init": [{
+              "name": "base",
+              "source": "eght_app_init.sh.erb",
+              "defaults": "generated-etc-default.erb",
+              "variables": {
+                  "name": "base",
+                  "description": "8x8 Base Embedded App",
+                  "processname": "java",
+                  "bin": "/usr/bin/java"
+              }
+          }]          
+        }
+      }
+    }
+  }
+}

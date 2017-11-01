@@ -1,0 +1,63 @@
+{
+  "variables": {
+    "sshhost": "",
+    "sshuser": "",
+    "sshid": "",
+    "chef_role": "eght_base",
+    "environment": "base_development",
+    "eght_app_name": "base_embedded",
+    "environments_path": "environments",
+    "config_template": "packer-chef-solo-config.json",
+    "art_vers": "8u121"
+  },
+
+  "builders": [
+    { "type": "null",
+      "ssh_pty" : true,
+      "ssh_host": "{{user `sshhost`}}",
+      "ssh_username": "{{user `sshuser`}}",
+      "ssh_private_key_file": "{{user `sshid`}}"
+    },
+    { "type": "docker",
+      "image": "centos:6.8",
+      "commit": true
+    }
+  ],
+
+  "provisioners" : [
+    {
+      "type": "shell",
+      "inline": ["yum -y install initscripts"],
+      "only" : ["docker"]
+    },
+    
+    { "type": "chef-solo",
+      "prevent_sudo": true,
+      "install_command": "curl -k -L https://www.chef.io/chef/install.sh | {{if .Sudo}}sudo{{end}} bash -s -- -v 12.8.1",
+      "execute_command": "{{if .Sudo}}sudo {{end}}/usr/bin/chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}}",
+      "environments_path": "{{user `environments_path`}}",
+      "chef_environment": "{{user `environment`}}",
+      "cookbook_paths": [ "berks-cookbooks" ],
+      "data_bags_path": "data_bags",
+      "roles_path": "roles",
+      "config_template": "{{user `config_template`}}",
+      "json": {
+        "eght_app": {
+          "application": {
+            "{{user `eght_app_name`}}": {
+              "art_vers": "{{user `art_vers`}}"
+            }
+          }
+        }
+      },
+      "run_list": [
+         "role[{{user `chef_role`}}]"
+      ],
+      "override": {
+        "null": {
+          "prevent_sudo": false
+        }
+      }
+    }
+  ]
+}

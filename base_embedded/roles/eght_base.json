@@ -1,0 +1,92 @@
+{
+    "name": "eght_base",
+    "description": "8x8 Base Embedded App",
+    "json_class": "Chef::Role",
+    "default_attributes": {
+        "eght_app": {
+          "type": "embedded",
+          "name": "base",
+          "install_java": true,
+          "application": {
+              "base": {
+                  "name":             "base",
+                  "type":             "embedded",
+                  "root":             "/apps",
+                  "app_base":         "/apps/base",
+                  "owner":            "base",
+                  "group":            "base",
+                  "mode":             "0744",
+                  "dmode":            "0755",
+                  "packages":         ["zip","sox","unzip"],
+                  "directories":      ["current","releases","shared"],
+                  "shared_links":     ["logs","tmp","run"],
+                  "dist_links":       ["libs","bin","config","docs"],
+                  "art_url":          "http://nexus-eq.8x8.com:8081/nexus/service/local/repositories/thirdparty/content/com/java/jdk/8u121/jdk-8u121-x64.tar.gz",
+                  "art_aid":          "jdk",
+                  "art_gid":          "com.java",
+                  "art_vers":         "8u121",
+                  "art_type":         "tgz",
+                  "java_options":     [],
+                  "REVERT":           false,
+                  "dev_tools":        true,
+                  "cleanup_releases": true,
+                  "dirs": [],
+                  "after": {
+                    "exec": [
+                      {
+                        "name": "after-install-cleanup-artifact",
+                        "command": "rm -rf /apps/base/releases/jdk* && rm -rf /apps/base/current/jdk* && rm -rf /apps/base/shared/jdk*",
+                        "user": "base",
+                        "group": "base"
+                      }
+                    ],
+                    "exec": [
+                      {
+                        "name": "tail-dev-null",
+                        "command": "tail -f /dev/null",
+                        "user": "base",
+                        "group": "base"
+                      }
+                    ]
+                  }
+              }
+          }
+      },
+      "java": {
+          "install_flavor": "oracle",
+          "jdk_version": 8,
+          "oracle": {
+              "accept_oracle_download_terms": true
+          }
+      },
+      "users": ["base"],
+      "security": {
+          "users": {
+              "allow": ["change_user"]
+          }
+      },
+      "auth": {
+        "pw_max_age": "99999"
+      }
+  },
+  "override_attributes": {},
+  "chef_type": "role",
+  "run_list": [
+    "recipe[user::data_bag]",
+    "recipe[eght_app]"
+  ],
+  "env_run_lists": {
+        "base_development": [
+          "recipe[user::data_bag]",
+          "recipe[eght_app]"
+        ],
+        "base_pilot": [
+            "recipe[user::data_bag]",
+            "recipe[eght_app]"
+        ],
+        "base_production": [
+            "recipe[user::data_bag]",
+            "recipe[eght_app]"
+    ]
+  }
+}

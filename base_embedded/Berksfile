@@ -1,0 +1,68 @@
+source "https://supermarket.chef.io"
+
+# By setting an environment variables
+# the following functions will set git URLs
+# for dependent cookbooks
+#  BERKS_GITHOST = host value for git URL
+#  BERKS_GITGROUP = group value for git URL
+#  DEBUG=1 enable debug mode
+def _cookbook(name, gitrepo, options = {} )
+
+  githost  = ENV['BERKS_GITHOST'] || '192.168.131.35'
+  gitgroup = ENV['BERKS_GITGROUP'] || 'sysops-chef'
+
+  if (options.has_key?("version".to_sym))
+    version = options[:version]
+  else
+    version = ">= 0.0.0"
+  end
+
+  # Skip git URL if the options includes a path symbol
+  if !(options.has_key?("path".to_sym))
+    giturl="git@#{githost}:#{gitgroup}/#{gitrepo}.git"
+    cookbook(name, version, {git: "#{giturl}"}.merge(options))
+  else
+    cookbook(name, version, options)
+  end
+
+  if ENV['DEBUG']
+    puts ("name: #{name} version: #{version} options: #{options} giturl: #{giturl}\n")
+  end
+
+end
+
+
+# Public Cookbooks is a repo storing all
+# third party cookbooks
+def public_cookbook(name, options = {})
+
+  _cookbook(name,"cookbooks",options)
+
+end
+
+# Site Cookbooks is a repo storing all
+# 8x8 created cookbooks
+def site_cookbook(name, options = {})
+
+  _cookbook(name,"site-cookbooks",options)
+
+end
+
+
+public_cookbook 'apt', {rel: 'apt', branch: "develop"}
+public_cookbook 'yum', {rel: 'yum', branch: "develop"}
+public_cookbook 'user', {rel: 'user', branch: "develop"}
+#public_cookbook 'java', {rel: 'java', branch: "develop"}
+public_cookbook 'ulimit', {rel: 'ulimit', branch: "develop"}
+public_cookbook 'file', {rel: 'file', branch: "develop"}
+public_cookbook 'ark', {rel: 'ark', branch: "develop"}
+#public_cookbook 'os-hardening', {rel: 'os-hardening', branch: "develop"}
+
+site_cookbook 'eght_app', { version: '>= 0.1.2', rel: 'eght_app', branch: "develop"}
+site_cookbook 'eght_tomcat', {rel: 'eght_tomcat', branch: "develop"}
+site_cookbook 'eght_jetty', {rel: 'eght_jetty', branch: "develop"}
+#site_cookbook 'eght_aws', {rel: 'eght_aws', branch: "develop"}
+
+
+
+metadata
