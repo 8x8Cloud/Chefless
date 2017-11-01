@@ -7,14 +7,21 @@ A baseline Docker container provisioned by our eght_app cookbook. If you do not 
 To get started, simply clone this repo:
 
 ```bash
-> git clone git@git.8x8.com:auto/chef/src/Chefless.git
+> git clone git@git.8x8.com:ckeleher/Chefless.git
 ```
 
-Then, you can pull down any packages needed and build your container:
+First, pull down any packages the project needs:
 
 ```bash
+> cd base_embedded
 > berks update
-> berks vendor base_embedded/berks-cookbooks
+> berks vendor
+> cd ..
+```
+
+Then, build your container:
+
+```bash
 > docker-compose up -d --build
 > docker ps
 ```
