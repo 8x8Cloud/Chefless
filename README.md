@@ -19,7 +19,7 @@ First, pull down any packages the project needs:
 > cd ..
 ```
 
-You can now build your container. You should also use the `--no-cache` flag for `docker-compose up` if you are iterating upon a previously built container. Execute the commands below to build and run your container and to find its unique container ID:
+You can now build your container. Execute the commands below to build and run your container and to find its unique container ID. You should also use the `--no-cache` flag for `docker-compose up` if you are iterating upon a previously built container:
 
 ```bash
 > docker-compose up -d --build
