@@ -39,14 +39,6 @@
                         "user": "base",
                         "group": "base"
                       }
-                    ],
-                    "exec": [
-                      {
-                        "name": "tail-dev-null",
-                        "command": "tail -f /dev/null",
-                        "user": "base",
-                        "group": "base"
-                      }
                     ]
                   }
               }
