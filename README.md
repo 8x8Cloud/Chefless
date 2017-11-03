@@ -19,14 +19,14 @@ First, pull down any packages the project needs:
 > cd ..
 ```
 
-Then, build your container:
+You can now build your container. You should also use the `--no-cache` flag for `docker-compose up` if you are iterating upon a previously built container. Execute the commands below to build and run your container and to find its unique container ID:
 
 ```bash
 > docker-compose up -d --build
 > docker ps
 ```
 
-Make a note of the container ID of nochef_baseapp shown by `docker ps`. Once the container has finished running (`docker ps` will stop listing it when it finishes), run these next commands to commit the container as an image:
+Make a note of the container ID of nochef_baseapp shown by `docker ps`. Once the container has finished running (`docker ps` will stop listing it when it finishes), run this next command to commit the container as an image:
 
 ```bash
 > docker commit CONTAINER_ID baseapp
