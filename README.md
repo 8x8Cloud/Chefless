@@ -19,7 +19,7 @@ First, pull down any packages the project needs:
 > cd ..
 ```
 
-You can now build your container. Execute the commands below to build and run your container and to find its unique container ID. You should also use the `--no-cache` flag for `docker-compose up` if you are iterating upon a previously built container:
+If you make a change at the cookbook level, you will need to remove the created berks-cookbooks folder and recreate it with the above commands. Execute the commands below to build and run your container and to find its unique container ID. You should also use the `--no-cache` flag for `docker-compose up` if you are iterating upon a previously built container:
 
 ```bash
 > docker-compose up -d --build
