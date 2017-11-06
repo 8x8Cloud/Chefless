@@ -28,7 +28,7 @@
                   "art_type":         "tgz",
                   "java_options":     [],
                   "REVERT":           false,
-                  "dev_tools":        true,
+                  "dev_tools":        false,
                   "cleanup_releases": true,
                   "dirs": [],
                   "after": {
