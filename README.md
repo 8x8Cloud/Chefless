@@ -61,7 +61,7 @@ Reach out to us on our mailing list, cloud-rad@8x8.com.
 If you're running into a bug, please file an issue on our tracker.
 
 ## Current issues and limitations
-* Freshly created containers will have an entrypoint command that does not work without the accompanying chef containers. This can be worked around by running the container with '--entrypoint=sh' and committing that new container over the original image, as described above.
+* Freshly created containers will have an entrypoint command that does not work without the accompanying chef containers. This can be worked around by running the container with `--entrypoint=sh` and committing that new container over the original image, as described above.
 * Containers are still somewhat large due to extra packages and features installed on CentOS containers. Optimizing for minimal container size is an ongoing proces.
 
 ## License
