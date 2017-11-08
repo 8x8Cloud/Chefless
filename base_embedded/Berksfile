@@ -62,7 +62,3 @@ site_cookbook 'eght_app', { version: '>= 0.1.2', rel: 'eght_app', branch: "devel
 site_cookbook 'eght_tomcat', {rel: 'eght_tomcat', branch: "develop"}
 site_cookbook 'eght_jetty', {rel: 'eght_jetty', branch: "develop"}
 #site_cookbook 'eght_aws', {rel: 'eght_aws', branch: "develop"}
-
-
-
-metadata

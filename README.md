@@ -19,14 +19,18 @@ First, pull down any packages the project needs:
 > cd ..
 ```
 
-If you make a change at the cookbook level, you will need to remove the created berks-cookbooks folder and recreate it with the above commands. Execute the commands below to build and run your container and to find its unique container ID. You should also use the `--no-cache` flag for `docker-compose up` if you are iterating upon a previously built container:
+Execute the commands below to build and run your container and to find its unique container ID:
 
 ```bash
-> docker-compose up -d --build
+# Building the container first with no caching is recommended
+# if you are iterating on a previously built container.
+
+> docker-compose build --no-cache
+> docker-compose up -d
 > docker ps
 ```
 
-Make a note of the container ID of nochef_baseapp shown by `docker ps`. Once the container has finished running (`docker ps` will stop listing it when it finishes), run this next command to commit the container as an image:
+Make a note of the `CONTAINER_ID` of chefless_baseapp shown by `docker ps`. Once the container has finished running (`docker ps` will stop listing it when it finishes), run this next command to commit the container as an image with the name 'baseapp':
 
 ```bash
 > docker commit CONTAINER_ID baseapp
@@ -43,7 +47,7 @@ Note that any changes you make within your container will be lost when exiting i
 
 Since this container is provisioned using eght\_app, you can customize it to your liking. The default setup targets the JDK artifact `dk-8u121-x64.tar.gz` and simply removes it. It also comes preconfigured with Jetty, Tomcat, and Jenkins users, as well as the Base user.
 
-Simply put, anything that can be done with eght\_app is possible to do within this container. More information on how to use eght\_app can be found [here](https://git.8x8.com/auto/chef/src/site-cookbooks).
+Simply put, anything that can be done with eght\_app is possible with this container set. More information on how to use eght\_app can be found [here](https://git.8x8.com/auto/chef/src/site-cookbooks).
 
 ## Why should I use this?
 
@@ -57,8 +61,8 @@ Reach out to us on our mailing list, cloud-rad@8x8.com.
 If you're running into a bug, please file an issue on our tracker.
 
 ## Current issues and limitations
-* Paths for roles, data_bags, and environments are hardcoded in `base_embedded/zero.rb`.
-* Containers are still somewhat large due to extra packages and features installed on CentOS containers.
+* Freshly created containers will have an entrypoint command that does not work without the accompanying chef containers. This can be worked around by running the container with '--entrypoint=sh' and committing that new container over the original image, as described above.
+* Containers are still somewhat large due to extra packages and features installed on CentOS containers. Optimizing for minimal container size is an ongoing proces.
 
 ## License
 
