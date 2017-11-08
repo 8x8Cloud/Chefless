@@ -30,7 +30,7 @@ Execute the commands below to build and run your container and to find its uniqu
 > docker ps
 ```
 
-Make a note of the `CONTAINER_ID` of chefless_baseapp shown by `docker ps`. Once the container has finished running (`docker ps` will stop listing it when it finishes), run this next command to commit the container as an image with the name 'baseapp':
+Make a note of the `CONTAINER_ID` of chefless_baseapp shown by `docker ps`. Once the container has finished running (`docker ps` will stop listing it when it finishes), run this next command to commit the container as an image with the name `baseapp`:
 
 ```bash
 > docker commit CONTAINER_ID baseapp
