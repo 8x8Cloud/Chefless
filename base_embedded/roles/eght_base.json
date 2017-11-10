@@ -38,6 +38,12 @@
                         "command": "rm -rf /apps/base/releases/jdk* && rm -rf /apps/base/current/jdk* && rm -rf /apps/base/shared/jdk*",
                         "user": "base",
                         "group": "base"
+                      },
+                      {
+                        "name": "after-install-yum-cleanup",
+                        "command": "yum clean all",
+                        "user": "base",
+                        "group": "base"
                       }
                     ]
                   }

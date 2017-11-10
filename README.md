@@ -1,6 +1,6 @@
-## Base Embedded
+# Chefless
 
-A baseline Docker container provisioned by our eght_app cookbook. If you do not already have Docker installed, refer [here](https://www.docker.com/community-edition).
+A baseline Docker container provisioned by our eght_app cookbook. This repo depends on [Docker](https://www.docker.com/community-edition) and the [Chef Development Kit](https://downloads.chef.io/chefdk).
 
 ## How does it work?
 
@@ -14,6 +14,7 @@ First, pull down any packages the project needs:
 
 ```bash
 > cd base_embedded
+> berks install
 > berks update
 > berks vendor
 > cd ..
@@ -43,15 +44,25 @@ You can now run and enter your container:
 ```
 Note that any changes you make within your container will be lost when exiting it unless you commit the container again. This simply requires opening another terminal window, running `docker ps` to find the new `CONTAINER_ID`, and running the commit command like above.
 
-## What else can I do with it?
+## How do I use this with my existing eght_app configs?
 
-Since this container is provisioned using eght\_app, you can customize it to your liking. The default setup targets the JDK artifact `dk-8u121-x64.tar.gz` and simply removes it. It also comes preconfigured with Jetty, Tomcat, and Jenkins users, as well as the Base user.
+Using this repo with an existing eght\_app config is fairly simple. Copy the files listed below from the base\_embedded folder into your app config folder, then remove the base\_embedded folder and put your app config folder in its place.
 
-Simply put, anything that can be done with eght\_app is possible with this container set. More information on how to use eght\_app can be found [here](https://git.8x8.com/auto/chef/src/site-cookbooks).
+* base\_embedded/Dockerfile
+* base\_embedded/first-boot.json
+* base\_embedded/zero.rb
+* base\_embedded/chefclient/
+
+Once you have these files copied over, you will need to find and replace appearances of "base_embedded" with the name of your application. These appear both in the top-level `Dockerfile` and `docker-compose.yml`, as well as in the files you just copied over. You will also need to replace the default role in `first-boot.json` with your app's role.
 
 ## Why should I use this?
 
-This setup provides the full ability to configure a container using eght\_app without having to install Chef or any of the systems that Chef needs. It accomplishes this by running distinct containers for Chef and its data and mounting their volumes within the app container, which allows our app container to access and run Chef without actually installing it. The end result is a much more lightweight container with minimal bloat.
+This setup provides the full ability to configure a container using eght\_app without having to install Chef or any of the systems that Chef needs. This lets you create a more lightweight container with minimal bloat.
+
+## Dependencies
+
+*  [Docker](https://www.docker.com/community-edition)
+*  [Chef Development Kit](https://downloads.chef.io/chefdk)
 
 ## What do I do if something breaks?
 
