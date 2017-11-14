@@ -55,6 +55,29 @@ Using this repo with an existing eght\_app config is fairly simple. Copy the fil
 
 Once you have these files copied over, you will need to find and replace appearances of "base_embedded" with the name of your application. These appear both in the top-level `Dockerfile` and `docker-compose.yml`, as well as in the files you just copied over. You will also need to replace the default role in `first-boot.json` with your app's role.
 
+If your application creates a service, you will need to create a second Dockerfile in your top-level directory to use after creating your container. Follow these steps:
+
+Create a new Dockerfile titled `Dockerfile.new` with the below contents, replacing CONTAINER_NAME and SERVICE_NAME with the name of your previously created container and the name of your app's service, respectively:
+
+```bash
+FROM CONTAINER_NAME
+
+ENTRYPOINT service SERVICE_NAME start && tail -f /dev/null
+```
+
+You can then build and start your container:
+
+```bash
+docker build -f Dockerfile.new . -t CONTAINER_NAME
+docker run -itd --name CONTAINER_NAME CONTAINER_NAME
+```
+
+You can also exec into your running container, which opens a CLI for the container:
+
+```bash
+docker exec -it CONTAINER_NAME bash
+```
+
 ## Why should I use this?
 
 This setup provides the full ability to configure a container using eght\_app without having to install Chef or any of the systems that Chef needs. This lets you create a more lightweight container with minimal bloat.
