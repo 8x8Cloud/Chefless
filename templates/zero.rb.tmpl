@@ -1,6 +1,7 @@
-node_name          "base_embedded"
+node_name          "%image_name%"
 cookbook_path      ["/tmp/chef/cookbooks"]
 role_path          ["/tmp/chef/roles"]
 data_bag_path      ["/tmp/chef/data_bags"]
-environments_path  ["/tmp/chef/environments"]
+environment_path   ["/tmp/chef/environments/%environment_path%"]
+environment        "%environment%"
 ssl_verify_mode    :verify_peer

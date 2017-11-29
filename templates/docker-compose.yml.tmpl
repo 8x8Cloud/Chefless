@@ -1,0 +1,27 @@
+
+# Builds a data volume container to host Chef        
+# cookbooks that we want provisioned into our image. 
+chefdata_%image_name%:
+    container_name: chefdata_%image_name%
+    build: %app_directory%
+    dockerfile: Dockerfile-chefdata
+    
+
+# Attach an image that contains a Chef installation. 
+chefclient_%image_name%:
+    container_name: chefclient_%image_name%
+    build: .
+    dockerfile: Dockerfile-chefclient
+    command: /bin/true
+
+
+%image_name%:
+    container_name: %image_name%
+    image: centos:6.8
+    volumes_from:
+        - chefdata_%image_name%
+        - chefclient_%image_name%
+    environment:
+        PATH: "/opt/chef/bin:$PATH"
+    entrypoint: "/opt/chef/bin/chef-client"
+    command: "-c /tmp/chef/zero.rb -z -j /tmp/chef/first-boot.json"

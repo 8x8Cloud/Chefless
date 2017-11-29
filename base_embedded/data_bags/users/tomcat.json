@@ -1,7 +1,0 @@
-{
-  "id"          : "tomcat",
-  "comment"     : "Tomcat Daemon",
-  "manage_home" : "false",
-  "ssh_keygen"  : "false",
-  "groups"      : ["tomcat"]
-}

@@ -1,0 +1,31 @@
+#!/bin/bash -e
+set -x
+
+# Creates a Berks.lock file and pulls down all the packages
+# that the user has specified their project needs. This means
+# that a Berksfile is required.
+cd %app_directory%
+berks install
+berks update
+berks vendor
+cd ..
+
+# No-cache is used to ensure that the build is 'pure'.
+# Alternatively we could use docker-compose up -d --build,
+# but this method does not have a no-cache option.
+docker-compose build --no-cache
+docker-compose up -d
+
+# Attaching allows the user to see eght_app's progress, and also
+# lets this script wait until the container exits before committing.
+docker attach %image_name%
+docker commit %image_name% %image_name%
+
+# Builds a new container using the Dockerfile.new that the user creates.
+docker build -t %image_name% -f Dockerfile.new .
+
+# Clean up the containers and supporting images this script makes.
+docker-compose down
+docker rmi chefless_chefdata_%image_name%
+docker rmi chefless_chefclient_%image_name%
+echo " Your image has been created and saved successfully."
