@@ -74,7 +74,15 @@ if [[ ! "$IMAGE" ]]; then
     IMAGE=$SERVICE"-"$ENVIRONMENT"-"$BRANCH
 fi
 
+
+# Pulls the top-level directory name of the it repo from the given git URL
 DIRECTORY=$(basename $GIT_URL .git)
+
+# Holds a string describing the operating system we're running on. 
+# Some common values are "Darwin" for MacOSX, and "Linux" for many Linux distributions. 
+# This is useful for cases where different operating systems need special commands or different command syntaxes.
+OS=$(uname)
+
 
 # Pull down the given git repo UNLESS another directory exists with the same name
 if [[ ! -d "$DIRECTORY" ]]; then
@@ -90,34 +98,48 @@ cd ..
 
 cp Dockerfile-chefdata ${DIRECTORY}/
 
+
+# Provides a more platform-agnostic way to run sed commands on a given file.
+# Usage: replace <sed command> <filename>
+replace(){
+    if [ $OS = 'Darwin' ]; then
+        sed -i '' $@
+    else
+        sed -i $@
+    fi
+}
+
+# Note: # is used instead of / as a delimiter for the sed commands (ran via our replace() function) below.
+# Using / as a delimiter can cause errors when working with an argument which may contain a / character, such as a file path.
+# The # character is not expected to appear in any of the arguments being passed, which is why we choose to use it.
+
 # Generate zero.rb, fill in templates, and put it in place
 cp templates/zero.rb.tmpl zero.rb
-sed -i '' 's/%image_name%/'"${IMAGE}"'/g' zero.rb
-sed -i '' 's/%environment%/'"${ENVIRONMENT}"'/g' zero.rb
-# Note: we're using # as the delimiter in this next line because the argument passed may incude '/' and '.'
-sed -i '' 's#%environment_path%#'"${ENVIRONMENT_PATH}"'#g' zero.rb
+replace 's#%image_name%#'"${IMAGE}"'#g' zero.rb
+replace 's#%environment%#'"${ENVIRONMENT}"'#g' zero.rb
+replace 's#%environment_path%#'"${ENVIRONMENT_PATH}"'#g' zero.rb
 mv zero.rb ${DIRECTORY}/
 
 # Generate first-boot.json, fill in templates, and put it in place
 cp templates/first-boot.json.tmpl first-boot.json
-sed -i '' 's/%app_chef_role%/'"${ROLE}"'/g' first-boot.json
+replace 's#%app_chef_role%#'"${ROLE}"'#g' first-boot.json
 mv first-boot.json ${DIRECTORY}/
 
 # Generate docker-compose.yml and fill in templates 
 cp templates/docker-compose.yml.tmpl docker-compose.yml
-sed -i '' 's/%app_directory%/'"${DIRECTORY}"'/g' docker-compose.yml
-sed -i '' 's/%image_name%/'"${IMAGE}"'/g' docker-compose.yml
+replace 's#%app_directory%#'"${DIRECTORY}"'#g' docker-compose.yml
+replace 's#%image_name%#'"${IMAGE}"'#g' docker-compose.yml
 
 # Generate Dockerfile.new and fill in templates 
 cp templates/Dockerfile.new.tmpl Dockerfile.new
-sed -i '' 's/%image_name%/'"${IMAGE}"'/g' Dockerfile.new
-sed -i '' 's/%service_name%/'"${SERVICE}"'/g' Dockerfile.new
+replace 's#%image_name%#'"${IMAGE}"'#g' Dockerfile.new
+replace 's#%service_name%#'"${SERVICE}"'#g' Dockerfile.new
 
 # Generate go.sh and fill in templates
 cp templates/go.sh.tmpl go.sh
-sed -i '' 's/%app_directory%/'"${DIRECTORY}"'/g' go.sh
-sed -i '' 's/%image_name%/'"${IMAGE}"'/g' go.sh
+replace 's#%app_directory%#'"${DIRECTORY}"'#g' go.sh
+replace 's#%image_name%#'"${IMAGE}"'#g' go.sh
 
 # Generate cleanup.sh and fill in templates
 cp templates/cleanup.sh.tmpl cleanup.sh
-sed -i '' 's/%app_directory%/'"${DIRECTORY}"'/g' cleanup.sh
+replace 's#%app_directory%#'"${DIRECTORY}"'#g' cleanup.sh
