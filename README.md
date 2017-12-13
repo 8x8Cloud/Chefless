@@ -7,7 +7,7 @@ A tool to make minimailzed Docker images using Chef. This repo depends on [Docke
 To get started, clone this repo:
 
 ```bash
-> git clone ********
+> git clone git@github.com:8x8Cloud/Chefless.git
 ```
 
 Then, run `config.sh` with the following arguments:
