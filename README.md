@@ -7,7 +7,7 @@ A tool to make minimailzed Docker images using eght_app. This repo depends on [D
 To get started, clone this repo:
 
 ```bash
-> git clone git@git.8x8.com:ckeleher/Chefless.git
+> git clone git@git.8x8.com:auto/chef/src/Chefless.git
 ```
 
 Then, run `config.sh` with the following arguments:
